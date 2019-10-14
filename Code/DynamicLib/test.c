@@ -5,38 +5,48 @@
 
 int main()
 {	
-	int a[5] = {12,4346,-999,45,32};
+	int a[UNUMBER];
+	
 	void *handle;
-	void (*f1)();
-	int (*f2)(),(*f3)();
+	void (*show)();
+	int (*max)(),(*sum)();
+	void(*urand)();
 	char* error;
-	handle = dlopen("/home/rlk/Study/week5/staticlib/libtest.so",RTLD_LAZY);
+	handle = dlopen("/home/rlk/Study/week6/Code/DynamicLib/libtest.so",RTLD_LAZY);
+
 	if(!handle)
 	{
 		fprintf(stderr,"%s\n",dlerror());
 		exit(1);	
 	}
-	f1=dlsym(handle,"show");
+	urand=dlsym(handle,"urand");
 	if((error=dlerror())!=NULL)
 	{
 		fprintf(stderr,"%s\n",dlerror());
 		exit(1);	
 	}
-	f2=dlsym(handle,"max");
+	urand(a,UNUMBER);
+	show=dlsym(handle,"show");
 	if((error=dlerror())!=NULL)
 	{
 		fprintf(stderr,"%s\n",dlerror());
 		exit(1);	
 	}
-	f3=dlsym(handle,"sum");
+	max=dlsym(handle,"max");
 	if((error=dlerror())!=NULL)
 	{
 		fprintf(stderr,"%s\n",dlerror());
 		exit(1);	
 	}
-	f1(a,5);
-	printf("max=%d\n", f2(a, 5));
-	printf("sum=%d\n", f3(a, 5));
+	sum=dlsym(handle,"sum");
+	if((error=dlerror())!=NULL)
+	{
+		fprintf(stderr,"%s\n",dlerror());
+		exit(1);	
+	}
+	show(a,UNUMBER);
+	printf("max=%d\n", max(a, UNUMBER));
+	printf("sum=%d\n", sum(a, UNUMBER));
 	if(dlclose(handle)<0)
 	{
 		fprintf(stderr,"%s\n",dlerror());
